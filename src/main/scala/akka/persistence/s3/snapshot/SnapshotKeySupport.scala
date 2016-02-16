@@ -6,10 +6,10 @@ trait SnapshotKeySupport {
 
   val extension: String
 
-  lazy val Pattern = ("""^snapshot-(.+)/(\d+)-(\d+)\.""" + extension + "$").r
+  lazy val Pattern = ("""^(.+)/(\d+)-(\d+)\.""" + extension + "$").r
 
   final def snapshotKey(metadata: SnapshotMetadata): String = {
-    s"snapshot-${metadata.persistenceId}/${metadata.sequenceNr.toString.reverse}-${metadata.timestamp}.$extension"
+    s"${metadata.persistenceId}/${metadata.sequenceNr.toString.reverse}-${metadata.timestamp}.$extension"
   }
 
   def parseKeyToMetadata(key: String): SnapshotMetadata = {
@@ -18,4 +18,6 @@ trait SnapshotKeySupport {
         SnapshotMetadata(persistenceId, sequenceNr.reverse.toLong, timestamp.toLong)
     }
   }
+
+  def prefixFromPersistenceId(persistenceId: String): String = persistenceId + "/"
 }

@@ -79,7 +79,7 @@ class S3SnapshotStore(config: Config) extends SnapshotStore with ActorLogging wi
     s3Client.listObjects(
       new ListObjectsRequest()
         .withBucketName(settings.bucketName)
-        .withPrefix(s"snapshot-$persistenceId/")
+        .withPrefix(prefixFromPersistenceId(persistenceId))
         .withDelimiter("/")
     )(s3Dispatcher)
       .map(_.getObjectSummaries.toList.map(s => parseKeyToMetadata(s.getKey))

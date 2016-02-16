@@ -10,7 +10,7 @@ class SnapshotKeySpec extends WordSpecLike
 
   "parseKeyToMetadata" must {
     "parse snapshot object key to SnapshotMetadata" in {
-      assert(parseKeyToMetadata("snapshot-p-9/15-1455442923252.ss") == SnapshotMetadata("p-9", 51L, 1455442923252L))
+      assert(parseKeyToMetadata("p-9/15-1455442923252.ss") == SnapshotMetadata("p-9", 51L, 1455442923252L))
     }
   }
 }
