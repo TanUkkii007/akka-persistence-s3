@@ -4,7 +4,8 @@ import akka.persistence.s3.{ S3ClientConfig, S3Client }
 import akka.persistence.snapshot.SnapshotStoreSpec
 import com.typesafe.config.ConfigFactory
 import scala.concurrent.duration._
-import scala.concurrent.Await
+import scala.concurrent.{ Future, Await }
+import scala.collection.JavaConversions._
 
 class S3SnapshotStoreSpec extends SnapshotStoreSpec(ConfigFactory.parseString(
   """
@@ -19,15 +20,21 @@ class S3SnapshotStoreSpec extends SnapshotStoreSpec(ConfigFactory.parseString(
     |  }
     |}
   """.stripMargin
-).withFallback(ConfigFactory.load())) {
+).withFallback(ConfigFactory.load())) with SnapshotKeySupport {
+
+  var s3Client: S3Client = _
+
+  val bucketName = "snapshot"
+
+  val extensionName: String = "ss"
 
   override def beforeAll() = {
     import system.dispatcher
-    val s3Client = new S3Client {
+    s3Client = new S3Client {
       override val s3ClientConfig: S3ClientConfig = new S3ClientConfig(system.settings.config.getConfig("s3-client"))
     }
-    Await.result(s3Client.createBucket("snapshot"), 5 seconds)
-    println("bucket snapshot created")
+    Await.result(s3Client.createBucket(bucketName), 5 seconds)
+    println(s"""bucket `$bucketName` created""")
     super.beforeAll()
   }
 }

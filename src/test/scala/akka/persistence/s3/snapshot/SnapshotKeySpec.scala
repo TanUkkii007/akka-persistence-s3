@@ -6,7 +6,7 @@ import org.scalatest.{ DiagrammedAssertions, WordSpecLike }
 class SnapshotKeySpec extends WordSpecLike
     with DiagrammedAssertions with SnapshotKeySupport {
 
-  val extension = "ss"
+  val extensionName = "ss"
 
   "parseKeyToMetadata" must {
     "parse snapshot object key to SnapshotMetadata" in {

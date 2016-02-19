@@ -29,7 +29,7 @@ class S3SnapshotStore(config: Config) extends SnapshotStore with ActorLogging wi
 
   private val s3Dispatcher = context.system.dispatchers.lookup("s3-snapshot-store.s3-client-dispatcher")
 
-  val extension = settings.extension
+  val extensionName = settings.extension
 
   override def loadAsync(persistenceId: String, criteria: SnapshotSelectionCriteria): Future[Option[SelectedSnapshot]] = {
     snapshotMetadatas(persistenceId, criteria)

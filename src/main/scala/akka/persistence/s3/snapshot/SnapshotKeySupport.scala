@@ -4,12 +4,12 @@ import akka.persistence.SnapshotMetadata
 
 trait SnapshotKeySupport {
 
-  val extension: String
+  val extensionName: String
 
-  lazy val Pattern = ("""^(.+)/(\d+)-(\d+)\.""" + extension + "$").r
+  lazy val Pattern = ("""^(.+)/(\d+)-(\d+)\.""" + extensionName + "$").r
 
   final def snapshotKey(metadata: SnapshotMetadata): String = {
-    s"${metadata.persistenceId}/${metadata.sequenceNr.toString.reverse}-${metadata.timestamp}.$extension"
+    s"${metadata.persistenceId}/${metadata.sequenceNr.toString.reverse}-${metadata.timestamp}.$extensionName"
   }
 
   def parseKeyToMetadata(key: String): SnapshotMetadata = {

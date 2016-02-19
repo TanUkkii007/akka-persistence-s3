@@ -27,6 +27,10 @@ trait S3Client {
     client.createBucket(bucketName)
   }
 
+  def deleteBucket(bucketName: String)(implicit ec: ExecutionContext): Future[Unit] = Future {
+    client.deleteBucket(bucketName)
+  }
+
   def putObject(bucketName: String, key: String, input: InputStream, metadata: ObjectMetadata)(implicit ec: ExecutionContext): Future[PutObjectResult] = Future {
     client.putObject(new PutObjectRequest(bucketName, key, input, metadata))
   }
@@ -41,5 +45,9 @@ trait S3Client {
 
   def deleteObject(bucketName: String, key: String)(implicit ec: ExecutionContext): Future[Unit] = Future {
     client.deleteObject(bucketName, key)
+  }
+
+  def deleteObjects(request: DeleteObjectsRequest)(implicit ec: ExecutionContext): Future[Unit] = Future {
+    client.deleteObjects(request)
   }
 }
