@@ -2,7 +2,7 @@ package akka.persistence.s3
 
 import java.io.InputStream
 
-import com.amazonaws.auth.BasicAWSCredentials
+import com.amazonaws.auth.{ BasicAWSCredentials, DefaultAWSCredentialsProviderChain }
 import com.amazonaws.services.s3.{ S3ClientOptions, AmazonS3Client }
 import com.amazonaws.services.s3.model._
 
@@ -12,7 +12,12 @@ trait S3Client {
   val s3ClientConfig: S3ClientConfig
 
   lazy val client: AmazonS3Client = {
-    val client = new AmazonS3Client(new BasicAWSCredentials(s3ClientConfig.awsKey, s3ClientConfig.awsSecret))
+    val client =
+      if (s3ClientConfig.awsUseDefaultCredentialsProviderChain)
+        new AmazonS3Client(new DefaultAWSCredentialsProviderChain).withRegion(s3ClientConfig.region)
+      else
+        new AmazonS3Client(new BasicAWSCredentials(s3ClientConfig.awsKey, s3ClientConfig.awsSecret))
+
     s3ClientConfig.endpoint.foreach { endpoint =>
       client.withEndpoint(endpoint)
       ()

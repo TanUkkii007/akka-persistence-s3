@@ -22,6 +22,7 @@ class S3ClientConfig(config: Config) {
   import AWSRegionNames._
   val awsKey = config getString "aws-access-key-id"
   val awsSecret = config getString "aws-secret-access-key"
+  val awsUseDefaultCredentialsProviderChain = config getBoolean "aws-use-default-credentials-provider-chain"
   val region: Region = config getString "region" match {
     case GovCloud       => Region.getRegion(Regions.GovCloud)
     case US_EAST_1      => Region.getRegion(Regions.US_EAST_1)
